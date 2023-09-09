@@ -1,0 +1,1570 @@
+cscope 15 $HOME/Desktop/ann -q 0000000069 0000009302
+	@test.c
+
+1 
+	~"¡dio.h
+"
+
+2 
+	~"m©h.h
+"
+
+3 
+	~"¡dlib.h
+"
+
+4 
+	~"time.h
+"
+
+6 
+	#INPUT_NODE
+ 2
+
+7 
+	#HIDE_NODE
+ 4
+
+8 
+	#OUTPUT_NODE
+ 1
+
+9 
+
+	)
+
+10 
+	#MAX_NUM
+ 30
+
+	)
+
+12 
+	g¡udyR©e
+ = 0.8;
+
+13 
+	gth»shŞd
+ = 1e-4;
+
+14 
+	gmo¡Times
+ = 1e6;
+
+15 
+	gŒašSize
+ = 0;
+
+16 
+	g‹¡Size
+ = 0;
+
+19 
+	sSam¶e
+{
+
+20 
+	mout
+[
+MAX_NUM
+][
+OUTPUT_NODE
+];
+
+21 
+	mš
+[
+MAX_NUM
+][
+INPUT_NODE
+];
+
+22 }
+	tSam¶e
+;
+
+24 
+	sNode
+{
+
+25 
+	mv®ue
+;
+
+26 
+	mbŸs
+;
+
+27 
+	mbŸs_d–
+;
+
+28 *
+	mweight
+;
+
+29 *
+	mweight_d–
+;
+
+30 }
+	tNode
+;
+
+32 
+Node
+ 
+	gšpuLay”
+[
+INPUT_NODE
+];
+
+33 
+Node
+ 
+	ghideLay”
+[
+HIDE_NODE
+];
+
+34 
+Node
+ 
+	gouutLay”
+[
+OUTPUT_NODE
+];
+
+36 
+	$sigmoid
+(
+x
+)
+
+38  1.0 / (1.0 + 
+	`exp
+(-
+x
+));
+
+39 
+	}
+}
+
+41 
+	$d_sigmoid
+(
+x
+)
+
+43  
+x
+ * (1 - x);
+
+44 
+	}
+}
+
+46 
+Sam¶e
+ * 
+	$g‘T¿šD©a
+(cÚ¡ * 
+f’ame
+)
+
+48 
+Sam¶e
+ * 
+»suÉ
+ = 
+	`m®loc
+((Sample));
+
+49 
+FILE
+ * 
+fe
+ = 
+	`fİ’
+(
+f’ame
+, "r");
+
+50 if(
+NULL
+ !ğ
+fe
+)
+
+52 
+couÁ
+ = 0;
+
+53 
+	`fsÿnf
+(
+fe
+,"%lf %lf %lf",
+
+54 &
+»suÉ
+->
+š
+[
+couÁ
+][0],
+
+55 &
+»suÉ
+->
+š
+[
+couÁ
+][1],
+
+56 &
+»suÉ
+->
+out
+[
+couÁ
+][0]è!ğ
+EOF
+)
+
+58 
+couÁ
+++;
+
+60 
+ŒašSize
+ = 
+couÁ
+;
+
+61 
+	`´štf
+("read ok\n");
+
+62 
+	`fşo£
+(
+fe
+);
+
+63  
+»suÉ
+;
+
+68 
+	`fşo£
+(
+fe
+);
+
+69 
+	`´štf
+("file openƒrror\n");
+
+70  
+NULL
+;
+
+72  
+»suÉ
+;
+
+73 
+	}
+}
+
+75 
+Sam¶e
+ * 
+	$g‘Te¡D©a
+(cÚ¡ * 
+f’ame
+)
+
+77 
+Sam¶e
+ * 
+»suÉ
+ = 
+	`m®loc
+((Sample));
+
+78 
+FILE
+ * 
+fe
+ = 
+	`fİ’
+(
+f’ame
+, "r");
+
+79 if(
+NULL
+ !ğ
+fe
+)
+
+81 
+couÁ
+ = 0;
+
+82 
+	`fsÿnf
+(
+fe
+,"%lf %lf",
+
+83 &
+»suÉ
+->
+š
+[
+couÁ
+][0],
+
+84 &
+»suÉ
+->
+š
+[
+couÁ
+][1]è!ğ
+EOF
+)
+
+86 
+couÁ
+++;
+
+88 
+‹¡Size
+ = 
+couÁ
+;
+
+89 
+	`´štf
+("read ok\n");
+
+90 
+	`fşo£
+(
+fe
+);
+
+91  
+»suÉ
+;
+
+96 
+	`fşo£
+(
+fe
+);
+
+97 
+	`´štf
+("file openƒrror\n");
+
+98  
+NULL
+;
+
+100  
+»suÉ
+;
+
+101 
+	}
+}
+
+103 
+	$´štD©a
+(
+Sam¶e
+ * 
+d©a
+, 
+size
+)
+
+105 
+i
+;
+
+106 if(
+d©a
+ =ğ
+NULL
+)
+
+108 
+	`´štf
+("null data\n");
+
+111 
+i
+ = 0; i < 
+size
+; i++)
+
+113 
+	`´štf
+("%d %là%là%lf\n", 
+i
+,
+
+114 
+d©a
+->
+š
+[
+i
+][0],
+
+115 
+d©a
+->
+š
+[
+i
+][1],
+
+116 
+d©a
+->
+out
+[
+i
+][0]);
+
+118 
+	}
+}
+
+120 
+	$š™
+()
+
+122 
+i
+,
+j
+;
+
+123 
+	`¤ªd
+(
+	`time
+(0));
+
+126 
+i
+ = 0; i< 
+INPUT_NODE
+; i++)
+
+128 
+špuLay”
+[
+i
+].
+weight
+ = 
+	`m®loc
+((è* 
+HIDE_NODE
+);
+
+129 
+špuLay”
+[
+i
+].
+weight_d–
+ = 
+	`m®loc
+((è* 
+HIDE_NODE
+);
+
+130 
+špuLay”
+[
+i
+].
+bŸs
+ = 0.0;
+
+131 
+špuLay”
+[
+i
+].
+bŸs_d–
+ = 0.0;
+
+132 
+j
+ = 0; j< 
+HIDE_NODE
+; j++)
+
+134 
+špuLay”
+[
+i
+].
+weight
+[
+j
+] = 
+	`¿nd
+() % 10000 / ()10000 * 2 - 1;
+
+135 
+špuLay”
+[
+i
+].
+weight_d–
+[
+j
+] = 0.0;
+
+140 
+i
+ = 0; i< 
+HIDE_NODE
+; i++)
+
+142 
+hideLay”
+[
+i
+].
+weight
+ = 
+	`m®loc
+((è* 
+OUTPUT_NODE
+);
+
+143 
+hideLay”
+[
+i
+].
+weight_d–
+ = 
+	`m®loc
+((è* 
+OUTPUT_NODE
+);
+
+144 
+hideLay”
+[
+i
+].
+bŸs
+ = 
+	`¿nd
+() % 10000 / ()10000 * 2 - 1;
+
+145 
+hideLay”
+[
+i
+].
+bŸs_d–
+ = 0.0;
+
+146 
+j
+ = 0; j< 
+OUTPUT_NODE
+; j++)
+
+148 
+hideLay”
+[
+i
+].
+weight
+[
+j
+] = 
+	`¿nd
+() % 10000 / ()10000 * 2 - 1;
+
+149 
+hideLay”
+[
+i
+].
+weight_d–
+[
+j
+] = 0.0;
+
+154 
+i
+ = 0; i< 
+OUTPUT_NODE
+; i++)
+
+156 
+ouutLay”
+[
+i
+].
+bŸs
+ = 
+	`¿nd
+() % 10000 / ()10000 * 2 - 1;
+
+157 
+ouutLay”
+[
+i
+].
+bŸs_d–
+ = 0.0;
+
+159 
+	}
+}
+
+161 
+	$»£tD–
+()
+
+163 
+i
+;
+
+164 
+j
+;
+
+165 
+i
+ = 0; i < 
+INPUT_NODE
+; i++)
+
+167 
+j
+ = 0; j < 
+HIDE_NODE
+; j++)
+
+169 
+špuLay”
+[
+i
+].
+weight_d–
+[
+j
+] = 0.0;
+
+173 
+i
+ = 0; i < 
+HIDE_NODE
+; i++)
+
+175 
+hideLay”
+[
+i
+].
+bŸs_d–
+ = 0.0;
+
+176 
+j
+ = 0; j < 
+OUTPUT_NODE
+; j++)
+
+178 
+hideLay”
+[
+i
+].
+weight_d–
+[
+j
+] = 0.0;
+
+182 
+j
+ = 0; j < 
+OUTPUT_NODE
+; j++)
+
+184 
+ouutLay”
+[
+j
+].
+bŸs_d–
+ = 0.0;
+
+186 
+	}
+}
+
+189 
+	$Max
+ (
+a
+, 
+b
+)
+
+191  
+a
+ > 
+b
+ ?‡ : b;
+
+192 
+	}
+}
+
+193 
+	$maš
+()
+
+195 
+	`š™
+();
+
+196 
+Sam¶e
+ * 
+ŒašSam¶e
+ =
+	`g‘T¿šD©a
+("TrainData.txt");
+
+197 
+	`´štD©a
+(
+ŒašSam¶e
+, 
+ŒašSize
+);
+
+199 
+ŒašTime
+;
+
+200 
+cu¼T¿šSam¶e_pos
+;
+
+201 
+šputLay”_po¡
+;
+
+202 
+ouuay”_pos
+;
+
+203 
+hid–ay”_pos
+;
+
+204 
+ŒašTime
+ = 0;¿šTim< 
+mo¡Times
+;rainTime++)
+
+206 
+	`»£tD–
+();
+
+209 
+”rÜ_max
+ = 0.0;
+
+211 
+cu¼T¿šSam¶e_pos
+ = 0; cu¼T¿šSam¶e_po < 
+ŒašSize
+; currTrainSample_pos++)
+
+213 
+šputLay”_po¡
+ğ0; iÅutLay”_po¡ < 
+INPUT_NODE
+; inputLayer_post++)
+
+215 
+špuLay”
+[
+šputLay”_po¡
+].
+v®ue
+ = 
+ŒašSam¶e
+->
+š
+[
+cu¼T¿šSam¶e_pos
+][inputLayer_post];
+
+219 
+hid–ay”_pos
+ğ0; hid–ay”_po < 
+HIDE_NODE
+; hidelayer_pos++)
+
+221 
+sum
+ = 0.0;
+
+222 
+šputLay”_po¡
+ğ0; iÅutLay”_po¡ < 
+INPUT_NODE
+; inputLayer_post++)
+
+224 
+sum
+ +ğ
+špuLay”
+[
+šputLay”_po¡
+].
+v®ue
+ * iÅuLay”[šputLay”_po¡].
+weight
+[
+hid–ay”_pos
+];
+
+227 
+sum
+ -ğ
+hideLay”
+[
+hid–ay”_pos
+].
+bŸs
+;
+
+228 
+hideLay”
+[
+hid–ay”_pos
+].
+v®ue
+ = 
+	`sigmoid
+(
+sum
+);
+
+231 
+ouuay”_pos
+ = 0; ouuay”_po < 
+OUTPUT_NODE
+; outputlayer_pos++)
+
+233 
+sum
+ = 0.0;
+
+234 
+hid–ay”_pos
+ğ0; hid–ay”_po < 
+INPUT_NODE
+; hidelayer_pos++)
+
+236 
+sum
+ +ğ
+špuLay”
+[
+hid–ay”_pos
+].
+v®ue
+ * iÅuLay”[hid–ay”_pos].
+weight
+[hidelayer_pos];
+
+239 
+sum
+ -ğ
+ouutLay”
+[
+ouuay”_pos
+].
+bŸs
+;
+
+240 
+ouutLay”
+[
+ouuay”_pos
+].
+v®ue
+ = 
+	`sigmoid
+(
+sum
+);
+
+244 
+”rÜ
+ = 0.0;
+
+245 
+ouuay”_pos
+ = 0; ouuay”_po < 
+OUTPUT_NODE
+; outputlayer_pos++)
+
+247 
+‹mp
+ = 
+	`çbs
+(
+ouutLay”
+[
+ouuay”_pos
+].
+v®ue
+ -
+
+248 
+ŒašSam¶e
+->
+out
+[
+cu¼T¿šSam¶e_pos
+][
+ouuay”_pos
+]
+
+251 
+”rÜ
+ +ğ
+‹mp
+ *emp / 2.0;
+
+254 
+”rÜ_max
+ = 
+	`Max
+Ó¼Ü_max, 
+”rÜ
+);
+
+257 
+ouuay”_pos
+ = 0; ouuay”_po < 
+OUTPUT_NODE
+; outputlayer_pos++)
+
+259 
+bŸs_d–
+ = -(
+ŒašSam¶e
+->
+out
+[
+cu¼T¿šSam¶e_pos
+][
+ouuay”_pos
+] -
+
+260 
+ouutLay”
+[
+ouuay”_pos
+].
+v®ue
+);
+
+261 
+bŸs_d–
+ *ğ
+	`d_sigmoid
+(
+ouutLay”
+[
+ouuay”_pos
+].
+v®ue
+);
+
+262 
+ouutLay”
+[
+ouuay”_pos
+].
+bŸs_d–
+ += bias_delta;
+
+265 
+hid–ay”_pos
+ = 0; hid–ay”_pos< 
+HIDE_NODE
+; hidelayer_pos++)
+
+267 
+ouuay”_pos
+ğ0; ouuay”_pos< 
+OUTPUT_NODE
+; outputlayer_pos++)
+
+269 
+weight_d–
+ = (
+ŒašSam¶e
+->
+out
+[
+cu¼T¿šSam¶e_pos
+][
+ouuay”_pos
+] -
+
+270 
+ouutLay”
+[
+ouuay”_pos
+].
+v®ue
+);
+
+271 
+weight_d–
+ *ğ
+	`d_sigmoid
+(
+ouutLay”
+[
+ouuay”_pos
+].
+v®ue
+);
+
+272 
+weight_d–
+ *ğ
+hideLay”
+[
+hid–ay”_pos
+].
+v®ue
+;
+
+273 
+hideLay”
+[
+hid–ay”_pos
+].
+weight_d–
+[
+ouuay”_pos
+] += weight_delta;
+
+276 
+hid–ay”_pos
+ = 0; hid–ay”_pos< 
+HIDE_NODE
+; hidelayer_pos++)
+
+278 
+sum
+ = 0.0;
+
+279 
+ouuay”_pos
+ğ0; ouuay”_pos< 
+OUTPUT_NODE
+; outputlayer_pos++)
+
+281 
+sum
+ +ğ(
+ŒašSam¶e
+->
+out
+[
+cu¼T¿šSam¶e_pos
+][
+ouuay”_pos
+] -
+
+282 
+ouutLay”
+[
+ouuay”_pos
+].
+v®ue
+);
+
+283 
+sum
+ *ğ
+	`d_sigmoid
+(
+ouutLay”
+[
+ouuay”_pos
+].
+v®ue
+);
+
+284 
+sum
+ *ğ
+hideLay”
+[
+hid–ay”_pos
+].
+weight
+[
+ouuay”_pos
+];
+
+286 
+hideLay”
+[
+hid–ay”_pos
+].
+bŸs_d–
+ +ğ
+sum
+;
+
+287 
+hideLay”
+[
+hid–ay”_pos
+].
+bŸs_d–
+ *ğ
+	`d_sigmoid
+(hideLay”[hid–ay”_pos].
+v®ue
+);
+
+291 
+šputLay”_po¡
+ğ0; iÅutLay”_po¡< 
+INPUT_NODE
+; inputLayer_post++)
+
+293 
+hid–ay”_pos
+ğ0; hid–ay”_pos< 
+OUTPUT_NODE
+; hidelayer_pos++)
+
+295 
+sum
+ = 0.0;
+
+296 
+ouuay”_pos
+ = 0; ouuay”_pos< 
+OUTPUT_NODE
+; outputlayer_pos++)
+
+298 
+sum
+ +ğ(
+ŒašSam¶e
+->
+out
+[
+cu¼T¿šSam¶e_pos
+][
+ouuay”_pos
+] -
+
+299 
+ouutLay”
+[
+ouuay”_pos
+].
+v®ue
+);
+
+300 
+sum
+ *ğ
+	`d_sigmoid
+(
+ouutLay”
+[
+ouuay”_pos
+].
+v®ue
+);
+
+301 
+sum
+ *ğ
+hideLay”
+[
+hid–ay”_pos
+].
+weight
+[
+ouuay”_pos
+];
+
+303 
+sum
+ *ğ
+	`d_sigmoid
+(
+hideLay”
+[
+hid–ay”_pos
+].
+v®ue
+);
+
+304 
+sum
+ *ğ
+špuLay”
+[
+šputLay”_po¡
+].
+v®ue
+;
+
+305 
+špuLay”
+[
+šputLay”_po¡
+].
+weight_d–
+[
+hid–ay”_pos
+] +ğ
+sum
+;
+
+308 if(
+”rÜ_max
+ < 
+th»shŞd
+)
+
+310 
+	`´štf
+("Œaš com¶‘e,¿š:%d maxƒ¼Ü:%lf\n", 
+ŒašTime
+ + 1, 
+”rÜ_max
+);
+
+315 
+i
+;
+
+316 
+šputLay”_po¡
+ = 0 ; iÅutLay”_po¡ < 
+INPUT_NODE
+; inputLayer_post++)
+
+318 
+hid–ay”_pos
+ = 0 ; hid–ay”_pos< 
+INPUT_NODE
+; hidelayer_pos++)
+
+320 
+špuLay”
+[
+šputLay”_po¡
+].
+weight
+[
+hid–ay”_pos
+ ] +ğ
+¡udyR©e
+ *
+
+321 
+špuLay”
+[
+šputLay”_po¡
+].
+weight_d–
+[
+hid–ay”_pos
+] /(è
+ŒašSize
+;
+
+324 
+hid–ay”_pos
+ = 0 ; hid–ay”_pos< 
+INPUT_NODE
+; hidelayer_pos++)
+
+326 
+hideLay”
+[
+hid–ay”_pos
+].
+bŸs
+ +=
+¡udyR©e
+ * hideLay”[hid–ay”_pos].
+bŸs_d–
+ / ()
+ŒašSize
+;
+
+327 
+ouuay”_pos
+ğ0 ; ouuay”_pos< 
+INPUT_NODE
+; outputlayer_pos++)
+
+329 
+hideLay”
+[
+hid–ay”_pos
+].
+weight
+[
+ouuay”_pos
+] +ğ
+¡udyR©e
+ *
+
+330 
+hideLay”
+[
+hid–ay”_pos
+].
+weight_d–
+[
+ouuay”_pos
+] /(è
+ŒašSize
+;
+
+333 
+ouuay”_pos
+ğ0 ; ouuay”_pos< 
+INPUT_NODE
+; outputlayer_pos++)
+
+335 
+ouutLay”
+[
+ouuay”_pos
+].
+bŸs
+ +=
+¡udyR©e
+ * ouutLay”[ouuay”_pos].
+bŸs_d–
+ / ()
+ŒašSize
+;
+
+340 
+Sam¶e
+ * 
+‹¡Sam¶e
+ = 
+	`g‘Te¡D©a
+("TestData.txt");
+
+341 
+cu¼T¿šSam¶e_pos
+ = 0; cu¼T¿šSam¶e_po < 
+‹¡Size
+; currTrainSample_pos++)
+
+343 
+šputLay”_po¡
+ = 0; iÅutLay”_po¡ < 
+INPUT_NODE
+; inputLayer_post++)
+
+345 
+špuLay”
+[
+šputLay”_po¡
+].
+v®ue
+ = 
+‹¡Sam¶e
+->
+š
+[
+cu¼T¿šSam¶e_pos
+][inputLayer_post];
+
+347 
+hid–ay”_pos
+ = 0; hid–ay”_po < 
+HIDE_NODE
+; hidelayer_pos++)
+
+349 
+sum
+ = 0.0;
+
+350 
+šputLay”_po¡
+ğ0; iÅutLay”_po¡< 
+INPUT_NODE
+; inputLayer_post++)
+
+352 
+sum
+ +ğ
+špuLay”
+[
+šputLay”_po¡
+].
+v®ue
+ * iÅuLay”[šputLay”_po¡].
+weight
+[
+hid–ay”_pos
+];
+
+354 
+sum
+ -ğ
+hideLay”
+[
+hid–ay”_pos
+].
+bŸs
+;
+
+355 
+hideLay”
+[
+hid–ay”_pos
+].
+v®ue
+ = 
+	`sigmoid
+(
+sum
+);
+
+357 
+ouuay”_pos
+ğ0; ouuay”_pos< 
+OUTPUT_NODE
+; outputlayer_pos++)
+
+359 
+sum
+ = 0.0;
+
+360 
+hid–ay”_pos
+ğ0; hid–ay”_pos< 
+HIDE_NODE
+; hidelayer_pos++)
+
+362 
+sum
+ +ğ
+hideLay”
+[
+hid–ay”_pos
+].
+v®ue
+ * hideLay”[hid–ay”_pos].
+weight
+[
+ouuay”_pos
+];
+
+364 
+sum
+ -ğ
+ouutLay”
+[
+ouuay”_pos
+].
+bŸs
+;
+
+365 
+ouutLay”
+[
+ouuay”_pos
+].
+v®ue
+ = 
+	`sigmoid
+(
+sum
+);
+
+368 
+ouuay”_pos
+ğ0; ouuay”_pos< 
+OUTPUT_NODE
+; outputlayer_pos++)
+
+370 
+‹¡Sam¶e
+->
+out
+[
+cu¼T¿šSam¶e_pos
+][
+ouuay”_pos
+] = 
+ouutLay”
+[ouuay”_pos].
+v®ue
+;
+
+374 
+	`´štD©a
+(
+‹¡Sam¶e
+, 
+‹¡Size
+);
+
+376 
+	}
+}
+
+	@
+1
+.
+0
+1
+7
+test.c

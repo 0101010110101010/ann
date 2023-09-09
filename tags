@@ -1,0 +1,45 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/home/zx/Desktop/ann/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	//
+HIDE_NODE	test.c	/^#define HIDE_NODE /;"	d	file:
+INPUT_NODE	test.c	/^#define INPUT_NODE /;"	d	file:
+MAX_NUM	test.c	/^#define MAX_NUM /;"	d	file:
+Max	test.c	/^double Max (double a, double b)$/;"	f	typeref:typename:double
+Node	test.c	/^typedef struct Node{$/;"	s	file:
+Node	test.c	/^}Node;$/;"	t	typeref:struct:Node	file:
+OUTPUT_NODE	test.c	/^#define OUTPUT_NODE /;"	d	file:
+Sample	test.c	/^typedef struct Sample{$/;"	s	file:
+Sample	test.c	/^}Sample;$/;"	t	typeref:struct:Sample	file:
+ann	Makefile	/^ann:test.c$/;"	t
+bias	test.c	/^	double bias; \/\/bias value$/;"	m	struct:Node	typeref:typename:double	file:
+bias_delta	test.c	/^	double bias_delta; \/\/ modify bias$/;"	m	struct:Node	typeref:typename:double	file:
+d_sigmoid	test.c	/^double d_sigmoid(double x)$/;"	f	typeref:typename:double
+getTestData	test.c	/^Sample * getTestData(const char * filename)$/;"	f	typeref:typename:Sample *
+getTrainData	test.c	/^Sample * getTrainData(const char * filename)$/;"	f	typeref:typename:Sample *
+hideLayer	test.c	/^Node hideLayer[HIDE_NODE];$/;"	v	typeref:typename:Node[]
+in	test.c	/^	double in[MAX_NUM][INPUT_NODE]; \/\/input$/;"	m	struct:Sample	typeref:typename:double[][]	file:
+init	test.c	/^void init()$/;"	f	typeref:typename:void
+inpuLayer	test.c	/^Node inpuLayer[INPUT_NODE];$/;"	v	typeref:typename:Node[]
+main	test.c	/^int main()$/;"	f	typeref:typename:int
+mostTimes	test.c	/^double mostTimes = 1e6; \/\/max study times $/;"	v	typeref:typename:double
+out	test.c	/^	double out[MAX_NUM][OUTPUT_NODE]; \/\/output$/;"	m	struct:Sample	typeref:typename:double[][]	file:
+outputLayer	test.c	/^Node outputLayer[OUTPUT_NODE];$/;"	v	typeref:typename:Node[]
+printData	test.c	/^void printData(Sample * data, int size)$/;"	f	typeref:typename:void
+resetDelta	test.c	/^void resetDelta()$/;"	f	typeref:typename:void
+sigmoid	test.c	/^double sigmoid(double x)$/;"	f	typeref:typename:double
+studyRate	test.c	/^double studyRate = 0.8;  \/\/study rate$/;"	v	typeref:typename:double
+test	Makefile	/^test:test.c$/;"	t
+testSize	test.c	/^double testSize = 0; $/;"	v	typeref:typename:double
+threshold	test.c	/^double threshold = 1e-4; \/\/max mistake$/;"	v	typeref:typename:double
+trainSize	test.c	/^double trainSize = 0; $/;"	v	typeref:typename:double
+value	test.c	/^	double value; \/\/current value$/;"	m	struct:Node	typeref:typename:double	file:
+weight	test.c	/^	double *weight; \/\/weight value$/;"	m	struct:Node	typeref:typename:double *	file:
+weight_delta	test.c	/^	double *weight_delta; \/\/modify weight $/;"	m	struct:Node	typeref:typename:double *	file:

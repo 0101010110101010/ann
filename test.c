@@ -69,7 +69,7 @@ Sample * getTrainData(const char * filename)
 		printf("file open error\n");
 		return NULL;
 	}
-  return result;
+	return result;
 }
 
 Sample * getTestData(const char * filename)
@@ -89,7 +89,6 @@ Sample * getTestData(const char * filename)
 		printf("read ok\n");
 		fclose(file);
 		return result;
-
 	}
 	else
 	{
@@ -97,7 +96,8 @@ Sample * getTestData(const char * filename)
 		printf("file open error\n");
 		return NULL;
 	}
-  return result;
+
+	return result;
 }
 
 void printData(Sample * data, int size)
@@ -123,7 +123,7 @@ void init()
 	srand(time(0));
 
 	//input init
-  for(i = 0; i< INPUT_NODE; i++)
+	for(i = 0; i< INPUT_NODE; i++)
 	{
 		inpuLayer[i].weight = malloc(sizeof(double) * HIDE_NODE);
 		inpuLayer[i].weight_delta = malloc(sizeof(double) * HIDE_NODE);
@@ -137,7 +137,7 @@ void init()
 	}
 	
 	//hide init
-  for(i = 0; i< HIDE_NODE; i++)
+	for(i = 0; i< HIDE_NODE; i++)
 	{
 		hideLayer[i].weight = malloc(sizeof(double) * OUTPUT_NODE);
 		hideLayer[i].weight_delta = malloc(sizeof(double) * OUTPUT_NODE);
@@ -151,7 +151,7 @@ void init()
 	}
 	
 	//output init
-  for(i = 0; i< OUTPUT_NODE; i++)
+	for(i = 0; i< OUTPUT_NODE; i++)
 	{
 		outputLayer[i].bias = rand() % 10000 / (double)10000 * 2 - 1;
 		outputLayer[i].bias_delta = 0.0;
@@ -210,18 +210,18 @@ int main()
 
 		for(currTrainSample_pos = 0; currTrainSample_pos < trainSize; currTrainSample_pos++)
 		{
-		  for(inputLayer_post= 0; inputLayer_post < INPUT_NODE; inputLayer_post++)
-		  {
+			for(inputLayer_post= 0; inputLayer_post < INPUT_NODE; inputLayer_post++)
+			{
 				inpuLayer[inputLayer_post].value = trainSample->in[currTrainSample_pos][inputLayer_post];
 			}
 
 			//forward spread input -> hide 
-		  for(hidelayer_pos= 0; hidelayer_pos < HIDE_NODE; hidelayer_pos++)
-		  {
+			for(hidelayer_pos= 0; hidelayer_pos < HIDE_NODE; hidelayer_pos++)
+			{
 				double sum = 0.0;
-		    for(inputLayer_post= 0; inputLayer_post < INPUT_NODE; inputLayer_post++)
-		    {
-				   sum += inpuLayer[inputLayer_post].value * inpuLayer[inputLayer_post].weight[hidelayer_pos];
+				for(inputLayer_post= 0; inputLayer_post < INPUT_NODE; inputLayer_post++)
+				{
+					sum += inpuLayer[inputLayer_post].value * inpuLayer[inputLayer_post].weight[hidelayer_pos];
 				}
 
 				sum -= hideLayer[hidelayer_pos].bias;
@@ -231,15 +231,15 @@ int main()
 			for(outputlayer_pos = 0; outputlayer_pos < OUTPUT_NODE; outputlayer_pos++)
 			{
 				double sum = 0.0;
-		    for(hidelayer_pos= 0; hidelayer_pos < HIDE_NODE; hidelayer_pos++)
-		    {
-				   sum += hideLayer[hidelayer_pos].value * hideLayer[hidelayer_pos].weight[outputlayer_pos];
+				for(hidelayer_pos= 0; hidelayer_pos < HIDE_NODE; hidelayer_pos++)
+				{
+					sum += hideLayer[hidelayer_pos].value * hideLayer[hidelayer_pos].weight[outputlayer_pos];
 				}
 
 				sum -= outputLayer[outputlayer_pos].bias;
 				outputLayer[outputlayer_pos].value = sigmoid(sum);
 			}
-			
+
 			//calculus error
 			double error = 0.0;
 			for(outputlayer_pos = 0; outputlayer_pos < OUTPUT_NODE; outputlayer_pos++)
@@ -264,24 +264,24 @@ int main()
 			//backward spread hide -> input
 			for(hidelayer_pos = 0; hidelayer_pos< HIDE_NODE; hidelayer_pos++)
 			{
-			  for(outputlayer_pos= 0; outputlayer_pos< OUTPUT_NODE; outputlayer_pos++)
-			  {
-				  double weight_delta = (trainSample->out[currTrainSample_pos][outputlayer_pos] - 
-				  		outputLayer[outputlayer_pos].value);
-				  weight_delta *= d_sigmoid(outputLayer[outputlayer_pos].value);
-				  weight_delta *= hideLayer[hidelayer_pos].value;
+				for(outputlayer_pos= 0; outputlayer_pos< OUTPUT_NODE; outputlayer_pos++)
+				{
+					double weight_delta = (trainSample->out[currTrainSample_pos][outputlayer_pos] - 
+							outputLayer[outputlayer_pos].value);
+					weight_delta *= d_sigmoid(outputLayer[outputlayer_pos].value);
+					weight_delta *= hideLayer[hidelayer_pos].value;
 					hideLayer[hidelayer_pos].weight_delta[outputlayer_pos] += weight_delta;
 				}
 			}
 			for(hidelayer_pos = 0; hidelayer_pos< HIDE_NODE; hidelayer_pos++)
 			{
 				double sum = 0.0;
-			  for(outputlayer_pos= 0; outputlayer_pos< OUTPUT_NODE; outputlayer_pos++)
-			  {
+				for(outputlayer_pos= 0; outputlayer_pos< OUTPUT_NODE; outputlayer_pos++)
+				{
 					sum += -(trainSample->out[currTrainSample_pos][outputlayer_pos] - 
-				  		outputLayer[outputlayer_pos].value);
-				  sum *= d_sigmoid(outputLayer[outputlayer_pos].value);
-				  sum *= hideLayer[hidelayer_pos].weight[outputlayer_pos];
+							outputLayer[outputlayer_pos].value);
+					sum *= d_sigmoid(outputLayer[outputlayer_pos].value);
+					sum *= hideLayer[hidelayer_pos].weight[outputlayer_pos];
 				}
 				sum *= d_sigmoid(hideLayer[hidelayer_pos].value);
 				hideLayer[hidelayer_pos].bias_delta += sum;
@@ -290,18 +290,18 @@ int main()
 			//backward spread hide -> input
 			for(inputLayer_post= 0; inputLayer_post< INPUT_NODE; inputLayer_post++)
 			{
-			  for(hidelayer_pos= 0; hidelayer_pos< HIDE_NODE; hidelayer_pos++)
-			  {
-				  double sum = 0.0;
-			    for(outputlayer_pos = 0; outputlayer_pos< OUTPUT_NODE; outputlayer_pos++)
-			    {
-					  sum += (trainSample->out[currTrainSample_pos][outputlayer_pos] - 
-				    		outputLayer[outputlayer_pos].value);
-				    sum *= d_sigmoid(outputLayer[outputlayer_pos].value);
-				    sum *= hideLayer[hidelayer_pos].weight[outputlayer_pos];
+				for(hidelayer_pos= 0; hidelayer_pos< HIDE_NODE; hidelayer_pos++)
+				{
+					double sum = 0.0;
+					for(outputlayer_pos = 0; outputlayer_pos< OUTPUT_NODE; outputlayer_pos++)
+					{
+						sum += (trainSample->out[currTrainSample_pos][outputlayer_pos] - 
+								outputLayer[outputlayer_pos].value);
+						sum *= d_sigmoid(outputLayer[outputlayer_pos].value);
+						sum *= hideLayer[hidelayer_pos].weight[outputlayer_pos];
 					}
-				  sum *= d_sigmoid(hideLayer[hidelayer_pos].value);
-				  sum *= inpuLayer[inputLayer_post].value;
+					sum *= d_sigmoid(hideLayer[hidelayer_pos].value);
+					sum *= inpuLayer[inputLayer_post].value;
 					inpuLayer[inputLayer_post].weight_delta[hidelayer_pos] += sum;
 				}
 			}
@@ -315,11 +315,11 @@ int main()
 		//modify
 		for(inputLayer_post = 0 ; inputLayer_post < INPUT_NODE; inputLayer_post++)
 		{
-		  for(hidelayer_pos = 0 ; hidelayer_pos< HIDE_NODE; hidelayer_pos++)
-		  {
+			for(hidelayer_pos = 0 ; hidelayer_pos< HIDE_NODE; hidelayer_pos++)
+			{
 				inpuLayer[inputLayer_post].weight[hidelayer_pos ] += studyRate * 
 					inpuLayer[inputLayer_post].weight_delta[hidelayer_pos] /(double) trainSize;
-		  }
+			}
 		}
 		for(hidelayer_pos = 0 ; hidelayer_pos< HIDE_NODE; hidelayer_pos++)
 		{
@@ -328,7 +328,7 @@ int main()
 		  {
 				hideLayer[hidelayer_pos].weight[outputlayer_pos] += studyRate * 
 					hideLayer[hidelayer_pos].weight_delta[outputlayer_pos] /(double) trainSize;
-		  }
+			}
 		}
 		for(outputlayer_pos= 0 ; outputlayer_pos< OUTPUT_NODE; outputlayer_pos++)
 		{
@@ -339,35 +339,35 @@ int main()
 	Sample * testSample = getTestData("TestData.txt");
 	for(currTrainSample_pos = 0; currTrainSample_pos < testSize; currTrainSample_pos++)
 	{
-	  for(inputLayer_post = 0; inputLayer_post < INPUT_NODE; inputLayer_post++)
-	  {
+		for(inputLayer_post = 0; inputLayer_post < INPUT_NODE; inputLayer_post++)
+		{
 			inpuLayer[inputLayer_post].value = testSample->in[currTrainSample_pos][inputLayer_post];
-	  }
-	  for(hidelayer_pos = 0; hidelayer_pos < HIDE_NODE; hidelayer_pos++)
-	  {
+		}
+		for(hidelayer_pos = 0; hidelayer_pos < HIDE_NODE; hidelayer_pos++)
+		{
 			double sum = 0.0;
-	    for(inputLayer_post= 0; inputLayer_post< INPUT_NODE; inputLayer_post++)
+			for(inputLayer_post= 0; inputLayer_post< INPUT_NODE; inputLayer_post++)
 			{
 				sum += inpuLayer[inputLayer_post].value * inpuLayer[inputLayer_post].weight[hidelayer_pos];
 			}
 			sum -= hideLayer[hidelayer_pos].bias;
 			hideLayer[hidelayer_pos].value = sigmoid(sum);
-	  }
-	  for(outputlayer_pos= 0; outputlayer_pos< OUTPUT_NODE; outputlayer_pos++)
-	  {
+		}
+		for(outputlayer_pos= 0; outputlayer_pos< OUTPUT_NODE; outputlayer_pos++)
+		{
 			double sum = 0.0;
-	    for(hidelayer_pos= 0; hidelayer_pos< HIDE_NODE; hidelayer_pos++)
+			for(hidelayer_pos= 0; hidelayer_pos< HIDE_NODE; hidelayer_pos++)
 			{
 				sum += hideLayer[hidelayer_pos].value * hideLayer[hidelayer_pos].weight[outputlayer_pos];
 			}
 			sum -= outputLayer[outputlayer_pos].bias;
 			outputLayer[outputlayer_pos].value = sigmoid(sum);
-	  }
+		}
 
-	  for(outputlayer_pos= 0; outputlayer_pos< OUTPUT_NODE; outputlayer_pos++)
-	  {
+		for(outputlayer_pos= 0; outputlayer_pos< OUTPUT_NODE; outputlayer_pos++)
+		{
 			testSample->out[currTrainSample_pos][outputlayer_pos] = outputLayer[outputlayer_pos].value;
-	  }
+		}
 	}
 
 	printData(testSample, testSize);

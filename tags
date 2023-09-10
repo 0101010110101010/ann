@@ -21,18 +21,25 @@ Sample	test.c	/^}Sample;$/;"	t	typeref:struct:Sample	file:
 ann	Makefile	/^ann:test.c$/;"	t
 bias	test.c	/^	double bias; \/\/bias value$/;"	m	struct:Node	typeref:typename:double	file:
 bias_delta	test.c	/^	double bias_delta; \/\/ modify bias$/;"	m	struct:Node	typeref:typename:double	file:
+d_bias	test.c	/^double d_bias()$/;"	f	typeref:typename:double
+d_loss	test.c	/^double d_loss(double x)$/;"	f	typeref:typename:double
 d_sigmoid	test.c	/^double d_sigmoid(double x)$/;"	f	typeref:typename:double
+d_value	test.c	/^double d_value(double x)$/;"	f	typeref:typename:double
+d_weight	test.c	/^double d_weight(double x)$/;"	f	typeref:typename:double
 getTestData	test.c	/^Sample * getTestData(const char * filename)$/;"	f	typeref:typename:Sample *
 getTrainData	test.c	/^Sample * getTrainData(const char * filename)$/;"	f	typeref:typename:Sample *
 hideLayer	test.c	/^Node hideLayer[HIDE_NODE];$/;"	v	typeref:typename:Node[]
 in	test.c	/^	double in[MAX_NUM][INPUT_NODE]; \/\/input$/;"	m	struct:Sample	typeref:typename:double[][]	file:
 init	test.c	/^void init()$/;"	f	typeref:typename:void
 inpuLayer	test.c	/^Node inpuLayer[INPUT_NODE];$/;"	v	typeref:typename:Node[]
+loss	test.c	/^double loss(double x)$/;"	f	typeref:typename:double
+loss_value	test.c	/^	double loss_value; \/\/loss value$/;"	m	struct:Node	typeref:typename:double	file:
 main	test.c	/^int main()$/;"	f	typeref:typename:int
 mostTimes	test.c	/^double mostTimes = 1e6; \/\/max study times $/;"	v	typeref:typename:double
 out	test.c	/^	double out[MAX_NUM][OUTPUT_NODE]; \/\/output$/;"	m	struct:Sample	typeref:typename:double[][]	file:
 outputLayer	test.c	/^Node outputLayer[OUTPUT_NODE];$/;"	v	typeref:typename:Node[]
 printData	test.c	/^void printData(Sample * data, int size)$/;"	f	typeref:typename:void
+push	Makefile	/^push:$/;"	t
 resetDelta	test.c	/^void resetDelta()$/;"	f	typeref:typename:void
 sigmoid	test.c	/^double sigmoid(double x)$/;"	f	typeref:typename:double
 studyRate	test.c	/^double studyRate = 0.8;  \/\/study rate$/;"	v	typeref:typename:double

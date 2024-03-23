@@ -77,7 +77,6 @@ void forward_propagation(HiddenLayer1 *hidden_layer1, HiddenLayer2 *hidden_layer
 }  
 
 void backward_propagation(HiddenLayer1 *hidden_layer1, HiddenLayer2 *hidden_layer2, OutputLayer *output_layer, double *input, double *target_data, double *output_data) {  
-	double output_error[OUTPUT_NEURONS];  
 	double output_delta[OUTPUT_NEURONS];  
 	double hidden2_error[HIDDEN2_NEURONS];  
 	double hidden2_delta[HIDDEN2_NEURONS];  
@@ -88,12 +87,6 @@ void backward_propagation(HiddenLayer1 *hidden_layer1, HiddenLayer2 *hidden_laye
 	for (int i = 0; i < OUTPUT_NEURONS; i++) {  
 		// 计算输出层的误差（即损失函数关于输出的导数）  
 		output_delta[i] = (target_data[i] - output_data[i]) * sigmoid_derivative(output_layer->output[i]);  
-
-		// 累积隐藏层到输出层的权重误差  
-		for (int j = 0; j < HIDDEN2_NEURONS; j++) {  
-			// 输出层误差通过权重反向传播到第二隐藏层  
-			hidden2_error[j] += output_delta[i] * output_layer->weights[j][i];  
-		}  
 
 		// 更新输出层到隐藏层的权重和偏置  
 		for (int j = 0; j < HIDDEN2_NEURONS; j++) {  
@@ -110,10 +103,10 @@ void backward_propagation(HiddenLayer1 *hidden_layer1, HiddenLayer2 *hidden_laye
 		hidden2_delta[i] = hidden2_error[i] * sigmoid_derivative(hidden_layer2->output[i]);  
 
 		// 更新第二隐藏层到输出层的权重和偏置  
-		for (int j = 0; j < OUTPUT_NEURONS; j++) {  
-			output_layer->weights[i][j] += LEARNING_RATE * output_delta[j] * hidden_layer2->output[i];  
+		for (int j = 0; j < HIDDEN1_NEURONS; j++) {  
+			hidden_layer2->weights[j][i] += LEARNING_RATE * hidden2_delta[i] * hidden_layer1->output[j];  
 		}  
-		output_layer->biases[i] += LEARNING_RATE * output_delta[i];  
+		hidden_layer2->biases[i] += LEARNING_RATE * hidden2_delta[i];  
 	}  
 
 	// 第一隐藏层  
@@ -123,12 +116,6 @@ void backward_propagation(HiddenLayer1 *hidden_layer1, HiddenLayer2 *hidden_laye
 			hidden1_error[i] += hidden2_delta[j] * hidden_layer2->weights[i][j];  
 		}  
 		hidden1_delta[i] = hidden1_error[i] * sigmoid_derivative(hidden_layer1->output[i]);  
-
-		// 更新第一隐藏层到第二隐藏层的权重和偏置  
-		for (int j = 0; j < HIDDEN2_NEURONS; j++) {  
-			hidden_layer2->weights[i][j] += LEARNING_RATE * hidden2_delta[j] * hidden_layer1->output[i];  
-		}  
-		hidden_layer2->biases[i] += LEARNING_RATE * hidden2_delta[i];  
 
 		// 更新输入层到第一隐藏层的权重和偏置  
 		for (int j = 0; j < INPUT_NEURONS; j++) {  
@@ -177,7 +164,6 @@ int main() {
 	// 训练
 	// 训练神经网络  
 	int epochs = 10000; // 假设我们训练10000轮  
-	double learning_rate = 0.01; // 学习率  
 
 	for (int epoch = 0; epoch < epochs; epoch++) {  
 		// 前向传播  
@@ -189,6 +175,7 @@ int main() {
 			output_error += (target_data[i] - output_data[i]) * (target_data[i] - output_data[i]);  
 			printf("target: %f  output: %f\n", target_data[i], output_data[i]);  
 		}  
+		sleep(1);
 
 		// 如果误差低于某个阈值，我们可以提前停止训练  
 		if (output_error < ERROR_THRESHOLD) {  

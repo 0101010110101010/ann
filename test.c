@@ -4,13 +4,15 @@
 #include "time.h"
 
 #define INPUT_NODE  2 // input  neuron num
-#define HIDE_NODE   4 // hide   neuron num
-#define HIDE_NODE_COL   2 // hide   neuron num
+#define HIDE_NODE   2 // hide   neuron num
+#define HIDE_NODE_COL   1 // hide   neuron num
 #define OUTPUT_NODE 1 // output neuron num
 
 #define MAX_NUM 300
 
-double studyRate = 1.8;  //study rate
+//#define DEBUG
+
+double studyRate = 0.8;  //study rate
 double threshold = 1e-4; //max mistake
 double mostTimes = 1e10; //max study times 
 double trainSize = 0; 
@@ -343,42 +345,49 @@ int main()
 
 				bias_delta *= d_bias();
 				bias_delta *= -1;
+#ifdef DEBUG
+				printf("[%d]bias delta: lossvalue:%lf value:%lf finish:%lf prevalue:%lf\n",
+				outputlayer_pos,
+				outputLayer[outputlayer_pos].loss_value, // a(loss) / a(y^) 
+				outputLayer[outputlayer_pos].value,   // a(y^)   / a(I)
+				bias_delta,
+				outputLayer[outputlayer_pos].bias_delta
+						);
+#endif
 				outputLayer[outputlayer_pos].bias_delta += bias_delta;
 			}
-
 			//backward spread output -> hide check hide weight
 			for(hidelayer_pos = 0; hidelayer_pos< HIDE_NODE; hidelayer_pos++)
-			{
+			{	
 				for(outputlayer_pos= 0; outputlayer_pos< OUTPUT_NODE; outputlayer_pos++)
 				{
-					double weight_delta = 1;
-					weight_delta *= outputLayer[outputlayer_pos].d_param;
+					double weight_delta = outputLayer[outputlayer_pos].d_param;
 					weight_delta *= d_weight(hideLayer[hidelayer_pos][HIDE_NODE_COL - 1].value);
 					weight_delta *= -1;
 					hideLayer[hidelayer_pos][HIDE_NODE_COL - 1].weight_delta[outputlayer_pos] += weight_delta;
 				}
 			}
-			//backward spread output -> hide check hide bias 
+
+			//backward spread output -> hide check d_param
 			for(hidelayer_pos = 0; hidelayer_pos< HIDE_NODE; hidelayer_pos++)
 			{
-				double sum_delta = 0;
-				double sum_param = 0;
 				double sum_all = 0;
-				for(k = 0; k < OUTPUT_NODE; k++)
-						sum_param += hideLayer[hidelayer_pos][HIDE_NODE_COL - 1].weight[k];
 				for(outputlayer_pos= 0; outputlayer_pos< OUTPUT_NODE; outputlayer_pos++)
 				{
 				  double sum = 1;
 					sum *= outputLayer[outputlayer_pos].d_param;
-					sum *= d_value(hideLayer[hidelayer_pos][HIDE_NODE_COL - 1].weight[outputlayer_pos]);
-					sum *= d_sigmoid(hideLayer[hidelayer_pos][HIDE_NODE_COL - 1].value);
-					sum_all += sum * (hideLayer[hidelayer_pos][HIDE_NODE_COL - 1].weight[outputlayer_pos] / sum_param);
-					sum *= d_bias();
-					sum_delta += sum;
+					sum *= hideLayer[hidelayer_pos][HIDE_NODE_COL - 1].weight[outputlayer_pos];
+					sum_all += sum;
 				}
-				hideLayer[hidelayer_pos][HIDE_NODE_COL - 1].d_param = (sum_all);
-				sum_delta *= -1;
-				hideLayer[hidelayer_pos][HIDE_NODE_COL - 1].bias_delta += sum_delta;
+				hideLayer[hidelayer_pos][HIDE_NODE_COL - 1].d_param = d_sigmoid(sum_all);
+			}
+			//backward spread output -> hide check hide bias 
+			for(hidelayer_pos = 0; hidelayer_pos< HIDE_NODE; hidelayer_pos++)
+			{
+				double bias_delta = hideLayer[hidelayer_pos][HIDE_NODE_COL - 1].d_param;
+				bias_delta *= d_bias();
+				bias_delta *= -1;
+				hideLayer[hidelayer_pos][HIDE_NODE_COL - 1].bias_delta += bias_delta;
 			}
 		
 			if(HIDE_NODE_COL > 1)
@@ -387,36 +396,29 @@ int main()
 				{
 					for(i = 0; i < HIDE_NODE; i++)
 					{
-						double sum_delta = 0;
-						double sum_param = 0;
 						double sum_all = 0;
-						for(k = 0; k < HIDE_NODE; k++)
-								sum_param += hideLayer[i][j].weight[k];
-
-						//backward spread hide -> hide check hide weight
+						double weight_delta = 1;
 						for(k = 0; k < HIDE_NODE; k++)
 						{
-							double weight_delta = 1;
+						  double sum = 1;
+							sum *= hideLayer[k][j + 1].d_param;
+							sum *= hideLayer[i][j].weight[k];
+							sum_all += sum;
+						}
+						hideLayer[i][j].d_param = d_sigmoid(sum_all);
+
+						double bias_delta = hideLayer[i][j].d_param;
+						bias_delta *= d_bias();
+						bias_delta *= -1;
+						hideLayer[i][j].bias_delta += bias_delta;
+
+						for(k = 0; k < HIDE_NODE; k++)
+						{
 							weight_delta *= hideLayer[k][j + 1].d_param;
 							weight_delta *= d_weight(hideLayer[i][j].value);
 							weight_delta *= -1;
 							hideLayer[i][j].weight_delta[k] += weight_delta;
-
-							//backward spread hide -> hide check hide bias 
-							{
-								double sum = 1;
-								sum *= hideLayer[k][j + 1].d_param;
-								sum *= d_value(hideLayer[i][j].weight[k]);
-								sum *= d_sigmoid(hideLayer[i][j].value);
-								sum_all += sum * (hideLayer[i][j].weight[k] / sum_param);
-								sum *= d_bias();
-								sum_delta += sum;
-							}
 						}
-					
-						hideLayer[i][j].d_param = sum_all;
-						sum_delta *= -1;
-						hideLayer[i][j].bias_delta += sum_delta;
 					}
 				}
 			}
@@ -439,7 +441,12 @@ int main()
 			printf("train complete, train:%d max error:%lf\n", trainTime + 1, error_max);
 			break;
 		}
+
+#ifdef DEBUG
+		printf("[%d]times:%d %lf %lf%%  error:%lf\n", currTrainSample_pos, trainTime, mostTimes, trainTime / mostTimes, error_max);
+#else
 		printf("\r[%d]times:%d %lf %lf%%  error:%lf", currTrainSample_pos, trainTime, mostTimes, trainTime / mostTimes, error_max);
+#endif
 
 		//modify
 		for(inputLayer_post = 0 ; inputLayer_post < INPUT_NODE; inputLayer_post++)
@@ -448,24 +455,68 @@ int main()
 			{
 				inpuLayer[inputLayer_post].weight[hidelayer_pos ] += studyRate * 
 					inpuLayer[inputLayer_post].weight_delta[hidelayer_pos] /(double) trainSize;
+#ifdef DEBUG
+				printf("[%d]input row:%d col:%d weight %lf bias %lf\n", 
+						__LINE__, 
+						inputLayer_post, 
+						hidelayer_pos, 
+						inpuLayer[inputLayer_post].weight[hidelayer_pos], 
+						inpuLayer[inputLayer_post].bias);
+#endif
 			}
 		}
-		int j;
+		int j,k;
 		for(hidelayer_pos = 0 ; hidelayer_pos< HIDE_NODE; hidelayer_pos++)
 		{
-			for(j = 0 ; j < HIDE_NODE_COL; j++)
+			for(j = 0 ; j < HIDE_NODE_COL - 1; j++)
 			{
-				hideLayer[hidelayer_pos][j].bias +=studyRate * hideLayer[hidelayer_pos][j].bias_delta / (double)trainSize;
-				for(outputlayer_pos= 0 ; outputlayer_pos< OUTPUT_NODE; outputlayer_pos++)
+				hideLayer[hidelayer_pos][j].bias +=
+					studyRate * hideLayer[hidelayer_pos][j].bias_delta / (double)trainSize;
+				for(k = 0 ; k < HIDE_NODE; k++)
 				{
-					hideLayer[hidelayer_pos][j].weight[outputlayer_pos] += studyRate * 
-						hideLayer[hidelayer_pos][j].weight_delta[outputlayer_pos] /(double) trainSize;
+					hideLayer[hidelayer_pos][j].weight[k] += studyRate * 
+						hideLayer[hidelayer_pos][j].weight_delta[k] /(double) trainSize;
+
+#ifdef DEBUG
+					printf("[%d]hide row:%d col:%d weight %lf bias %lf\n", 
+							__LINE__, 
+							hidelayer_pos, 
+							j, 
+							hideLayer[hidelayer_pos][j].weight[k], 
+							hideLayer[hidelayer_pos][j].bias);
+#endif
 				}
+			}
+		}
+		for(hidelayer_pos = 0 ; hidelayer_pos< HIDE_NODE; hidelayer_pos++)
+		{
+			hideLayer[hidelayer_pos][HIDE_NODE_COL - 1].bias +=
+				studyRate * hideLayer[hidelayer_pos][HIDE_NODE_COL - 1].bias_delta / (double)trainSize;
+			for(outputlayer_pos= 0 ; outputlayer_pos< OUTPUT_NODE; outputlayer_pos++)
+			{
+				hideLayer[hidelayer_pos][HIDE_NODE_COL - 1].weight[outputlayer_pos] += studyRate * 
+					hideLayer[hidelayer_pos][HIDE_NODE_COL - 1].weight_delta[outputlayer_pos] /(double) trainSize;
+#ifdef DEBUG
+				printf("[%d]hide row:%d col:%d weight %lf bias %lf\n", 
+						__LINE__, 
+						hidelayer_pos, 
+						HIDE_NODE_COL - 1, 
+						hideLayer[hidelayer_pos][HIDE_NODE_COL - 1].weight[outputlayer_pos], 
+						hideLayer[hidelayer_pos][HIDE_NODE_COL - 1].bias);
+#endif
 			}
 		}
 		for(outputlayer_pos= 0 ; outputlayer_pos< OUTPUT_NODE; outputlayer_pos++)
 		{
 			outputLayer[outputlayer_pos].bias +=studyRate * outputLayer[outputlayer_pos].bias_delta / (double)trainSize;
+#ifdef DEBUG
+			printf("[%d]output row:%d bias %lf bias_delta %lf chang:%lf\n", 
+					__LINE__, 
+					outputlayer_pos, 
+					outputLayer[outputlayer_pos].bias, outputLayer[outputlayer_pos].bias_delta,
+					studyRate * outputLayer[outputlayer_pos].bias_delta / (double)trainSize
+					);
+#endif
 		}
 	}
 

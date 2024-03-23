@@ -133,7 +133,7 @@ int main() {
 	// 初始化权重和偏置为随机值（这里简化为0）  
 	for (int i = 0; i < INPUT_NEURONS; i++) {  
 		for (int j = 0; j < HIDDEN1_NEURONS; j++) {  
-			hidden_layer1.weights[i][j] = 0.0;  
+			hidden_layer1.weights[i][j] = 1.0;  
 		}  
 	}  
 	for (int i = 0; i < HIDDEN1_NEURONS; i++) {  
@@ -141,7 +141,7 @@ int main() {
 	}  
 	for (int i = 0; i < HIDDEN1_NEURONS; i++) {  
 		for (int j = 0; j < HIDDEN2_NEURONS; j++) {  
-			hidden_layer2.weights[i][j] = 0.0;  
+			hidden_layer2.weights[i][j] = 1.0;  
 		}  
 	}  
 	for (int i = 0; i < HIDDEN2_NEURONS; i++) {  
@@ -149,7 +149,7 @@ int main() {
 	}  
 	for (int i = 0; i < HIDDEN2_NEURONS; i++) {  
 		for (int j = 0; j < OUTPUT_NEURONS; j++) {  
-			output_layer.weights[i][j] = 0.0;  
+			output_layer.weights[i][j] = 1.0;  
 		}  
 	}  
 	for (int i = 0; i < OUTPUT_NEURONS; i++) {  

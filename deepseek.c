@@ -5,8 +5,8 @@
 
 // 定义神经网络结构
 #define INPUT_NODES 2
-#define HIDDEN_LAYERS 3
-#define HIDDEN_NODES 4
+#define HIDDEN_LAYERS 5
+#define HIDDEN_NODES 5
 #define OUTPUT_NODES 3
 
 // 定义学习率和训练次数
@@ -155,7 +155,7 @@ int main() {
     double targets[4][OUTPUT_NODES] = {{0, 0, 0}, {0, 1, 1}, {1, 0, 1}, {1, 1, 0}};
 
     // 训练神经网络
-    for (int epoch = 0; epoch < EPOCHS; epoch++) {
+    for (int epoch = 0; 1 || epoch < EPOCHS; epoch++) {
         for (int i = 0; i < 4; i++) {
             double hidden[HIDDEN_LAYERS][HIDDEN_NODES] = {0};
             double output[OUTPUT_NODES] = {0};
@@ -174,8 +174,17 @@ int main() {
 					double output[OUTPUT_NODES] = {0};
 
 					forward(inputs[i], hidden, output, weights_input_hidden, weights_hidden_hidden, weights_hidden_output, bias_hidden, bias_output);
+			
+					// 计算输出层的误差
+					double output_error[OUTPUT_NODES] = {0};
+					for (int j = 0; j < OUTPUT_NODES; j++)
+							output_error[j] += (targets[i][j] - output[j]) * sigmoid_derivative(output[j]);
 
-					printf("Input: [%f, %f] -> Output: [%f, %f, %f] [%f, %f, %f]\n", inputs[i][0], inputs[i][1], output[0], output[1], output[2], targets[i][0], targets[i][1], targets[i][2]);
+					printf("Input: [%f, %f] -> Output: [%f, %f, %f] [%f, %f, %f] err:[%f,%f,%f]\n", 
+							inputs[i][0], inputs[i][1], 
+							output[0], output[1], output[2], 
+							targets[i][0], targets[i][1], targets[i][2], 
+							output_error[0], output_error[1], output_error[2]);
 			}
 			system("clear");
     }

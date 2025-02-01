@@ -1,2 +1,4 @@
 run:
 	gcc deepseek.c -o deep -lm && ./deep
+relu:
+	gcc deepseek_relu.c -o deep_relu -lm && ./deep_relu

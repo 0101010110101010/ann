@@ -5,13 +5,104 @@
 
 // 定义神经网络结构
 #define INPUT_NODES 2
-#define HIDDEN_LAYERS 5
-#define HIDDEN_NODES 5
+#define HIDDEN_LAYERS 2
+#define HIDDEN_NODES 10
 #define OUTPUT_NODES 3
 
 // 定义学习率和训练次数
 #define LEARNING_RATE 0.1
-#define EPOCHS 10000
+#define EPOCHS 200000
+
+#define MAX_NUM 300
+
+double trainSize = 0;   
+double testSize = 0;    
+
+//sample                                     
+typedef struct Sample{                       
+  double out[MAX_NUM][OUTPUT_NODES]; //output 
+  double in[MAX_NUM][INPUT_NODES]; //input    
+}Sample;                                     
+
+Sample * getTrainData(const char * filename)        
+{                                                   
+  Sample * result = malloc(sizeof(Sample));         
+	memset(result, 0, sizeof(Sample));
+  FILE * file = fopen(filename, "r");               
+  if(NULL != file)                                  
+  {                                                 
+    int count = 0;                                  
+    while(fscanf(file,"%lf %lf %lf %lf %lf",                
+          &result->in[count][0],                    
+          &result->in[count][1],                    
+          &result->out[count][0],
+          &result->out[count][1],
+          &result->out[count][2]) != EOF)           
+    {                                               
+      count++;                                      
+    }                                               
+    trainSize = count;                              
+    printf("read ok\n");                            
+    fclose(file);                                   
+    return result;                                  
+                                                    
+  }                                                 
+  else                                              
+  {                                                 
+    fclose(file);                                   
+    printf("file open error\n");                    
+    return NULL;                                    
+  }                                                 
+  return result;                                    
+}                                                   
+
+Sample * getTestData(const char * filename)      
+{                                                
+  Sample * result = malloc(sizeof(Sample));      
+	memset(result, 0, sizeof(Sample));
+  FILE * file = fopen(filename, "r");            
+  if(NULL != file)                               
+  {                                              
+    int count = 0;                               
+    while(fscanf(file,"%lf %lf",                 
+          &result->in[count][0],                 
+          &result->in[count][1]) != EOF)         
+    {                                            
+      count++;                                   
+    }                                            
+    testSize = count;                            
+    printf("read ok\n");                         
+    fclose(file);                                
+    return result;                               
+  }                                              
+  else                                           
+  {                                              
+    fclose(file);                                
+    printf("file open error\n");                 
+    return NULL;                                 
+  }                                              
+                                                 
+  return result;                                 
+}                                                
+
+void printData(Sample * data, int size)              
+{                                                    
+  int i;                                             
+  if(data == NULL)                                   
+  {                                                  
+    printf("null data\n");                           
+    return;                                          
+  }                                                  
+  for(i = 0; i < size; i++)                          
+  {                                                  
+    printf("%d %lf %lf %lf,%lf,%lf\n", i,                    
+          data->in[i][0],                            
+          data->in[i][1],                            
+          data->out[i][0],                          
+          data->out[i][1],                          
+          data->out[i][2]);                          
+  }                                                  
+}                                                    
 
 // 激活函数：Sigmoid
 double sigmoid(double x) {
@@ -66,7 +157,7 @@ void forward(double input[INPUT_NODES], double hidden[HIDDEN_LAYERS][HIDDEN_NODE
             output[i] += hidden[HIDDEN_LAYERS - 1][j] * weights_hidden_output[i][j];
         }
         output[i] += bias_output[i];
-        output[i] = sigmoid(output[i]);
+        //output[i] = sigmoid(output[i]);
     }
 }
 
@@ -83,7 +174,8 @@ void backward(double input[INPUT_NODES], double hidden[HIDDEN_LAYERS][HIDDEN_NOD
 
     // 计算输出层的误差
     for (int i = 0; i < OUTPUT_NODES; i++) {
-        output_error[i] = (target[i] - output[i]) * sigmoid_derivative(output[i]);
+        //output_error[i] = (target[i] - output[i]) * sigmoid_derivative(output[i]);
+        output_error[i] = (target[i] - output[i]) ;
     }
 
     // 计算最后一个隐藏层的误差
@@ -143,6 +235,10 @@ int main() {
     double bias_hidden[HIDDEN_LAYERS][HIDDEN_NODES];
     double bias_output[OUTPUT_NODES];
 
+		Sample * trainSample =getTrainData("TrainDataDeep.txt");    
+		printData(trainSample, trainSize);                      
+		Sample * testSample = getTestData("TestData.txt");
+
     // 初始化权重和偏置
     initialize((double *)weights_input_hidden, HIDDEN_NODES * INPUT_NODES);
     initialize((double *)weights_hidden_hidden, (HIDDEN_LAYERS - 1) * HIDDEN_NODES * HIDDEN_NODES);
@@ -151,53 +247,60 @@ int main() {
     initialize(bias_output, OUTPUT_NODES);
 
     // 训练数据
-    double inputs[4][INPUT_NODES] = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
-    double targets[4][OUTPUT_NODES] = {{0, 0, 0}, {0, 1, 1}, {1, 0, 1}, {1, 1, 0}};
 
     // 训练神经网络
-    for (int epoch = 0; 1 || epoch < EPOCHS; epoch++) {
-        for (int i = 0; i < 4; i++) {
+    for (int epoch = 0; epoch < EPOCHS; epoch++) {
+				//printf("train[%d]\r", epoch);
+        for (int i = 0; i < trainSize; i++) {
             double hidden[HIDDEN_LAYERS][HIDDEN_NODES] = {0};
             double output[OUTPUT_NODES] = {0};
 
             // 前向传播
-            forward(inputs[i], hidden, output, weights_input_hidden, weights_hidden_hidden, weights_hidden_output, bias_hidden, bias_output);
+            forward(trainSample->in[i], hidden, output, weights_input_hidden, weights_hidden_hidden, weights_hidden_output, bias_hidden, bias_output);
 
             // 反向传播
-            backward(inputs[i], hidden, output, targets[i], weights_input_hidden, weights_hidden_hidden, weights_hidden_output, bias_hidden, bias_output);
+            backward(trainSample->in[i], hidden, output, trainSample->out[i], weights_input_hidden, weights_hidden_hidden, weights_hidden_output, bias_hidden, bias_output);
         }
 
+			#if 0
 			// 测试神经网络
+			system("clear");
 			printf("Testing the trained neural network[%u - %u]:\n", epoch, EPOCHS);
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < trainSize; i++) {
 					double hidden[HIDDEN_LAYERS][HIDDEN_NODES] = {0};
 					double output[OUTPUT_NODES] = {0};
 
-					forward(inputs[i], hidden, output, weights_input_hidden, weights_hidden_hidden, weights_hidden_output, bias_hidden, bias_output);
+					forward(trainSample->in[i], hidden, output, weights_input_hidden, weights_hidden_hidden, weights_hidden_output, bias_hidden, bias_output);
 			
 					// 计算输出层的误差
 					double output_error[OUTPUT_NODES] = {0};
 					for (int j = 0; j < OUTPUT_NODES; j++)
-							output_error[j] += (targets[i][j] - output[j]) * sigmoid_derivative(output[j]);
+							output_error[j] += (trainSample->out[i][j] - output[j]) * sigmoid_derivative(output[j]);
 
-					printf("Input: [%f, %f] -> Output: [%f, %f, %f] [%f, %f, %f] err:[%f,%f,%f]\n", 
-							inputs[i][0], inputs[i][1], 
+					printf("Input: [%f, %f] -> Output: [%f, %f, %f] [%f, %f, %f] err:[%f,%f,%f] sub:[%f,%f,%f]\n", 
+							trainSample->in[i][0], trainSample->in[i][1], 
 							output[0], output[1], output[2], 
-							targets[i][0], targets[i][1], targets[i][2], 
-							output_error[0], output_error[1], output_error[2]);
+							trainSample->out[i][0], trainSample->out[i][1], trainSample->out[i][2], 
+							output_error[0], output_error[1], output_error[2],
+							trainSample->out[i][0] - output[0],
+							trainSample->out[i][1] - output[1],
+							trainSample->out[i][2] - output[2]
+							);
 			}
-			system("clear");
+			#else
+				printf("train[%d]\r", epoch);
+			#endif
     }
 
     // 测试神经网络
     printf("Testing the trained neural network:\n");
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < testSize; i++) {
         double hidden[HIDDEN_LAYERS][HIDDEN_NODES] = {0};
         double output[OUTPUT_NODES] = {0};
 
-        forward(inputs[i], hidden, output, weights_input_hidden, weights_hidden_hidden, weights_hidden_output, bias_hidden, bias_output);
+        forward(testSample->in[i], hidden, output, weights_input_hidden, weights_hidden_hidden, weights_hidden_output, bias_hidden, bias_output);
 
-        printf("Input: [%f, %f] -> Output: [%f, %f, %f]\n", inputs[i][0], inputs[i][1], output[0], output[1], output[2]);
+        printf("Input: [%f, %f] -> Output: [%f, %f, %f]\n", testSample->in[i][0], testSample->in[i][1], output[0], output[1], output[2]);
     }
 
     return 0;

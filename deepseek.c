@@ -157,7 +157,7 @@ void forward(double input[INPUT_NODES], double hidden[HIDDEN_LAYERS][HIDDEN_NODE
             output[i] += hidden[HIDDEN_LAYERS - 1][j] * weights_hidden_output[i][j];
         }
         output[i] += bias_output[i];
-        //output[i] = sigmoid(output[i]);
+        output[i] = sigmoid(output[i]);
     }
 }
 
@@ -174,8 +174,8 @@ void backward(double input[INPUT_NODES], double hidden[HIDDEN_LAYERS][HIDDEN_NOD
 
     // 计算输出层的误差
     for (int i = 0; i < OUTPUT_NODES; i++) {
-        //output_error[i] = (target[i] - output[i]) * sigmoid_derivative(output[i]);
-        output_error[i] = (target[i] - output[i]) ;
+        output_error[i] = (target[i] - output[i]) * sigmoid_derivative(output[i]);
+        //output_error[i] = (target[i] - output[i]) ;
     }
 
     // 计算最后一个隐藏层的误差
